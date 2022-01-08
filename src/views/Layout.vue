@@ -1,20 +1,22 @@
 <template>
-  <div class="home">
-    hello
+  <div class="layout">
+    <p>用户的userName为: {{ $store.state.user.profile.account }}</p>
+    <!-- 触发user模块下的方法修改数据 -->
+    <button @click="$store.commit('user/setUser', { account: '张三' })">
+      修改user模块的数据
+    </button>
   </div>
-  <p>userName: {{$store.state.userName}}</p>
-  <p>vuex计算属性: {{$store.getters.getName}}</p>
 </template>
 
 <script>
-import { useStore } from 'vuex'
+// import { useStore } from 'vuex'
+import request from '@/utils/request'
 export default {
-  name: 'Home',
+  name: 'Layout',
   setup () {
-    // 使用vuex仓库
-    const store = useStore()
-    console.log(store.state.userName)
-    console.log(store.getters.getName)
+    // 在setup中获取使用vuex仓库
+    // const store = useStore()
+    request('/member/profile', 'post', { a: 0 })
   }
 }
 </script>
