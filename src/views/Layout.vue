@@ -1,22 +1,22 @@
 <template>
-  <div class="layout">
-    <p>用户的userName为: {{ $store.state.user.profile.account }}</p>
-    <!-- 触发user模块下的方法修改数据 -->
-    <button @click="$store.commit('user/setUser', { account: '张三' })">
-      修改user模块的数据
-    </button>
+  <!-- 顶部通栏 -->
+  <AppTopnav />
+  <!-- 头部模块 -->
+  <header>头部模块</header>
+  <!-- 内容区域 -->
+  <div class="mian">
+    <!-- 二级路由 -->
+    <router-view/>
   </div>
+  <!-- 底部模块 -->
+  <footer>底部模块</footer>
 </template>
 
 <script>
-// import { useStore } from 'vuex'
-import request from '@/utils/request'
+import AppTopnav from '@/components/AppTopnav.vue'
+
 export default {
   name: 'Layout',
-  setup () {
-    // 在setup中获取使用vuex仓库
-    // const store = useStore()
-    request('/member/profile', 'post', { a: 0 })
-  }
+  components: { AppTopnav }
 }
 </script>
