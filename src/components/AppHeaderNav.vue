@@ -1,18 +1,27 @@
 <template>
   <ul class="app-header-nav navs">
-    <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="(item) in listData" :key="item.id">
-      <a href="#">{{item.name}}</a>
-      <div class="layer">
+    <li class="home"><router-link to="/">首页</router-link></li>
+    <li
+      v-for="item in listData"
+      :key="item.id"
+      @mouseenter="isShow(item.id, true)"
+      @mouseleave="isShow(item.id, false)"
+    >
+      <router-link
+        :to="`/category/${item.id}`"
+        @click="isShow(item.id, false)"
+        >{{ item.name }}</router-link
+      >
+      <div class="layer" :class="{ open: item.open }">
         <ul>
           <li v-for="goods in item.children" :key="goods.id">
-            <a href="#">
-              <img
-                :src="goods.picture"
-                :alt="goods.name"
-              />
-              <p>{{goods.name}}</p>
-            </a>
+            <router-link
+              :to="`/category/sub/${goods.id}`"
+              @click="isShow(item.id, false)"
+            >
+              <img :src="goods.picture" :alt="goods.name" />
+              <p>{{ goods.name }}</p>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -28,13 +37,20 @@ export default {
   name: 'AppHeaderNav',
   setup () {
     const store = useStore()
+    // 获取导航数据
     const listData = computed(() => store.state.category.list)
-    findAllCategory().then(res => {
-      console.log(res)
+    findAllCategory().then((res) => {
+      res.result.forEach((item) => (item.open = false))
       store.commit('category/setList', res.result)
     })
+    // 二级导航显示/隐藏
+    const isShow = (id, flag) => {
+      if (!id) return
+      store.commit('category/isShow', { id, flag })
+    }
     return {
-      listData
+      listData,
+      isShow
     }
   }
 }
@@ -62,10 +78,10 @@ export default {
           color: @xtxColor;
           border-bottom: 1px solid @xtxColor;
         }
-        > .layer {
-        height: 132px;
-        opacity: 1;
-      }
+        // > .layer {
+        //   height: 132px;
+        //   opacity: 1;
+        // }
       }
     }
   }
@@ -82,6 +98,10 @@ export default {
     opacity: 0;
     box-shadow: 0 0 5px #ccc;
     transition: all 0.2s 0.1s;
+    &.open {
+      height: 132px;
+      opacity: 1;
+    }
     ul {
       display: flex;
       flex-wrap: nowrap;
