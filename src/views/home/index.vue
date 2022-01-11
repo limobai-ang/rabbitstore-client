@@ -1,16 +1,19 @@
 <template>
-  <div class="home">我是home组件</div>
+  <div class="home">
+    <div class="home-entry">
+      <div class="container">
+        <!-- 左侧分类 -->
+        <HomeCategory />
+      </div>
+    </div>
+  </div>
 </template>
-
 <script>
+import HomeCategory from './components/HomeCategory'
 export default {
-  name: 'Home'
+  name: 'Home',
+  components: { HomeCategory }
 }
 </script>
-
-<style lang="less" scoped>
-  // @import '../../assets/style/mixins.less';
-  .home {
-    .hoverShadow()
-  }
+<style scoped lang="less">
 </style>

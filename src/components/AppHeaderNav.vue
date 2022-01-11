@@ -35,14 +35,23 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 export default {
   name: 'AppHeaderNav',
-  setup () {
+  props: {
+    SendRequest: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup (props) {
     const store = useStore()
     // 获取导航数据
     const listData = computed(() => store.state.category.list)
-    findAllCategory().then((res) => {
-      res.result.forEach((item) => (item.open = false))
-      store.commit('category/setList', res.result)
-    })
+    // 是否发送请求 吸顶部导航不重复发送请求获取数据
+    if (props.SendRequest) {
+      findAllCategory().then((res) => {
+        res.result.forEach((item) => (item.open = false))
+        store.commit('category/setList', res.result)
+      })
+    }
     // 二级导航显示/隐藏
     const isShow = (id, flag) => {
       if (!id) return

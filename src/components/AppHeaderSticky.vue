@@ -2,7 +2,7 @@
   <div class="app-header-sticky" :class="{show: y>=78 }">
     <div class="container">
       <RouterLink class="logo" to="/"/>
-      <AppHeaderNav v-show="y>=78"/>
+      <AppHeaderNav :SendRequest="false" v-show="y>=78"/>
       <div class="right">
         <RouterLink to="/" >品牌</RouterLink>
         <RouterLink to="/" >专题</RouterLink>
