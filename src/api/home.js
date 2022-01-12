@@ -5,3 +5,8 @@ import request from '@/utils/request'
 export const findBrand = (limit) => {
   return request('/home/brand', 'get', { limit })
 }
+
+// 获取轮播图数据
+export const getBanner = () => {
+  return request('/home/banner', 'get')
+}

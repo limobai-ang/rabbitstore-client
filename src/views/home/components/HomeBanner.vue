@@ -1,0 +1,44 @@
+<template>
+  <div class="home-banner">
+    <AppCarousel :bannerList="bannerList" :bannerOperation="bannerOperation" bannerOperationTime="3000" />
+  </div>
+</template>
+<script>
+import { getBanner } from '@/api/home'
+import { ref } from 'vue'
+export default {
+  name: 'HomeBanner',
+  setup () {
+    // 轮播图配置项 是否开启轮播暂停/播放
+    const bannerOperation = ref(false)
+    // 轮播图数据
+    const bannerList = ref([])
+    getBanner().then(res => {
+      bannerList.value = res.result
+      bannerOperation.value = true
+    })
+    return {
+      bannerList,
+      bannerOperation
+    }
+  }
+}
+</script>
+<style scoped lang="less">
+.home-banner {
+  width: 1240px;
+  height: 500px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 98
+}
+.app-carousel {
+  ::v-deep .carousel-btn.prev {
+    left: 270px;
+  }
+  ::v-deep .carousel-indicator {
+    padding-left: 250px;
+  }
+}
+</style>
