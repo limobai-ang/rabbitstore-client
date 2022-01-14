@@ -1,5 +1,5 @@
 <template>
-  <div class='app-carousel' @mouseout="bannerOperation && mouseEntrancePlay && operation(true)" @mousemove="bannerOperation && mouseEntrancePlay && operation(false)">
+  <div class='app-carousel' @mouseout="$emit('update:bannerOperation', true)" @mousemove="$emit('update:bannerOperation', false)">
     <ul class="carousel-body">
       <li class="carousel-item" v-for="(item) in bannerList" :key="item.id" :class="{fade: item.id === currentBanner.id}">
         <RouterLink to="/">
@@ -75,7 +75,7 @@ export default {
             setCurrentIndex('right')
           }, props.bannerOperationTime)
         } else {
-          clearInterval(itemId.value)
+          itemId.value && clearInterval(itemId.value)
         }
       }
     })()

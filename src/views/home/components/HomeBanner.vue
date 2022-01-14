@@ -1,6 +1,6 @@
 <template>
   <div class="home-banner">
-    <AppCarousel :bannerList="bannerList" :bannerOperation="bannerOperation" bannerOperationTime="3000" />
+    <AppCarousel :bannerList="bannerList" v-model:bannerOperation="bannerOperation" bannerOperationTime="3000" />
   </div>
 </template>
 <script>

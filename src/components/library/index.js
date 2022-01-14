@@ -5,6 +5,9 @@
 
 import AppSkeleton from './AppSkeleton.vue'
 import AppCarousel from './AppCarousel.vue'
+import AppMore from './AppMore.vue'
+// 图片加载失败显示的图片
+import imgError from '@/assets/images/imgError.png'
 
 export default {
   install (app) {
@@ -12,5 +15,36 @@ export default {
     // 如果要挂载原型 app.config.globalProperties 方式
     app.component(AppSkeleton.name, AppSkeleton)
     app.component(AppCarousel.name, AppCarousel)
+    app.component(AppMore.name, AppMore)
+    // 自定义指令
+    defineDirective(app)
   }
+}
+
+const defineDirective = (app) => {
+  // 图片懒加载指令
+  app.directive('lazyload', {
+    // vue2 监听使用指令的DOM是否创建好，钩子函数：inserted
+    // vue3 的指令拥有的钩子函数和组件的一样，使用指令的DOM是否创建好，钩子函数：mounted
+    mounted (el, binding) {
+      console.log('mounted')
+      // 创建一个观察对象，来观察当前使用指令的元素是否进入可视区
+      const observe = new IntersectionObserver(([{ isIntersecting }]) => {
+        // 两个回调参数 entries被观察的元素信息对象的数组 [{元素信息},{}]，信息中isIntersecting判断进入或离开 , observer就是观察实例
+        if (isIntersecting) {
+          // 通过isIntersecting来判断是否进入可视区, 进入可视区之后停止观察
+          observe.unobserve(el)
+          // 处理图片加载失败的情况, 如果图片加载失败就显示默认图片
+          el.onerror = () => {
+            el.src = imgError
+          }
+          // 把指令的值设置给el元素的src属性 binding.value就是指令传递的值
+          el.src = binding.value
+        }
+      }, {
+        threshold: 0
+      })
+      observe.observe(el)
+    }
+  })
 }
