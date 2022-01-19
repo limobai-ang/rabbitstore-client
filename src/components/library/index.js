@@ -6,6 +6,9 @@
 import AppSkeleton from './AppSkeleton.vue'
 import AppCarousel from './AppCarousel.vue'
 import AppMore from './AppMore.vue'
+import AppBread from './AppBread.vue'
+import AppBreadItem from './AppBreadItem.vue'
+
 // 图片加载失败显示的图片
 import imgError from '@/assets/images/imgError.png'
 
@@ -16,6 +19,8 @@ export default {
     app.component(AppSkeleton.name, AppSkeleton)
     app.component(AppCarousel.name, AppCarousel)
     app.component(AppMore.name, AppMore)
+    app.component(AppBread.name, AppBread)
+    app.component(AppBreadItem.name, AppBreadItem)
     // 自定义指令
     defineDirective(app)
   }
@@ -27,7 +32,6 @@ const defineDirective = (app) => {
     // vue2 监听使用指令的DOM是否创建好，钩子函数：inserted
     // vue3 的指令拥有的钩子函数和组件的一样，使用指令的DOM是否创建好，钩子函数：mounted
     mounted (el, binding) {
-      console.log('mounted')
       // 创建一个观察对象，来观察当前使用指令的元素是否进入可视区
       const observe = new IntersectionObserver(([{ isIntersecting }]) => {
         // 两个回调参数 entries被观察的元素信息对象的数组 [{元素信息},{}]，信息中isIntersecting判断进入或离开 , observer就是观察实例
