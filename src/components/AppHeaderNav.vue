@@ -4,7 +4,7 @@
     <li
       v-for="item in listData"
       :key="item.id"
-      @mouseenter="isShow(item.id, true)"
+      @mousemove="isShow(item.id, true)"
       @mouseleave="isShow(item.id, false)"
     >
       <router-link
