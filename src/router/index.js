@@ -3,6 +3,7 @@ const Home = () => import('@/views/home')
 const Layout = () => import('@/views/Layout')
 const category = () => import('@/views/category')
 const sub = () => import('@/views/category/Sub')
+const goods = () => import('@/views/goods')
 
 const routes = [
   {
@@ -11,7 +12,8 @@ const routes = [
     children: [
       { path: '/', component: Home },
       { path: '/category/:id', component: category },
-      { path: '/category/sub/:id', component: sub }
+      { path: '/category/sub/:id', component: sub },
+      { path: '/product/:id', component: goods }
     ]
   }
 ]
