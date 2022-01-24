@@ -86,6 +86,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 800px 800px;
     background-color: #f8f8f8;
+    z-index: 999
   }
   .middle {
     width: 400px;

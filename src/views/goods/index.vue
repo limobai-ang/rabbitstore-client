@@ -20,6 +20,12 @@
         <!-- 信息区域 -->
         <div class="spec">
           <GoodsInfoSpec :goods="goodsData" v-if="goodsData"/>
+          <!-- Sku 组件 -->
+          <GoodsSku :goods="goodsData" skuId="1369155862131642369" @change="changeSku" v-if="goodsData"/>
+          <!-- 选择数量组件 -->
+          <AppNumbox v-model="num" :max="goodsData && goodsData.inventory" label="数量"/>
+          <!-- 按钮 -->
+          <AppButton type="primary" style="margin-top:20px;">加入购物车</AppButton>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -44,6 +50,7 @@ import GoodsRelevant from './components/GoodsRelevant.vue'
 import GoodsImage from './components/GoodsImage.vue'
 import GoodsSales from './components/GoodsSales.vue'
 import GoodsInfoSpec from './components/GoodsInfoSpec.vue'
+import GoodsSku from './components/GoodsSku.vue'
 import { useRoute } from 'vue-router'
 import { getGoods } from '@/api/goods'
 import { ref, watch } from 'vue-demi'
@@ -53,7 +60,8 @@ export default {
     GoodsRelevant,
     GoodsImage,
     GoodsSales,
-    GoodsInfoSpec
+    GoodsInfoSpec,
+    GoodsSku
   },
   setup () {
     // 当前路由信息
@@ -71,8 +79,23 @@ export default {
         getGoods(newVal)
       }
     })
+
+    // sku传递过来的值 （父组件需要判断值，如果规格选择不完整不能加入购物车）
+    const changeSku = (sku) => {
+      // 判断传递过来的值是否选择完整
+      if (sku) {
+        goodsData.value.price = sku.price
+        goodsData.value.oldPrice = sku.oldPrice
+        goodsData.value.inventory = sku.inventory
+      }
+    }
+
+    // 商品数量
+    const num = ref(1)
     return {
-      goodsData
+      goodsData,
+      changeSku,
+      num
     }
   }
 }

@@ -31,7 +31,7 @@
       <!-- 判断当前是否是品牌 -->
       <ul v-if="goodsList.id !== 'brand'">
         <li v-for="item in goodsList.goods" :key="item.id">
-          <RouterLink to="/">
+          <RouterLink :to="`/product/${item.id}`">
             <img :src="item.picture" alt="item.name" />
             <div class="info">
               <p class="name ellipsis-2">{{ item.name }}</p>
