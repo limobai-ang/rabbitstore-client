@@ -18,28 +18,32 @@
           <GoodsSales />
         </div>
         <!-- 信息区域 -->
-        <div class="spec">
-          <GoodsInfoSpec :goods="goodsData" v-if="goodsData"/>
+        <div class="spec" v-if="goodsData">
+          <GoodsInfoSpec :goods="goodsData" />
           <!-- Sku 组件 -->
-          <GoodsSku :goods="goodsData" skuId="1369155862131642369" @change="changeSku" v-if="goodsData"/>
+          <GoodsSku :goods="goodsData" skuId="1369155862131642369" @change="changeSku" />
           <!-- 选择数量组件 -->
-          <AppNumbox v-model="num" :max="goodsData && goodsData.inventory" label="数量"/>
+          <AppNumbox v-model="num" :max="goodsData.inventory" label="数量"/>
           <!-- 按钮 -->
           <AppButton type="primary" style="margin-top:20px;">加入购物车</AppButton>
         </div>
       </div>
       <!-- 商品推荐 -->
-      <GoodsRelevant />
+      <GoodsRelevant :goodsId="goodsData && goodsData.id" />
       <!-- 商品详情 -->
-      <div class="goods-footer">
+      <div class="goods-footer" v-if="goodsData" >
         <div class="goods-article">
           <!-- 商品+评价 -->
-          <div class="goods-tabs"></div>
+          <GoodsTabs />
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <GoodsWarn />
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <div class="goods-aside">
+          <GoodsHot :goodsId=" goodsData.id" :type="1" />
+          <GoodsHot :goodsId="goodsData.id" :type="2" />
+          <GoodsHot :goodsId="goodsData.id" :type="3" />
+        </div>
       </div>
     </div>
   </div>
@@ -51,9 +55,12 @@ import GoodsImage from './components/GoodsImage.vue'
 import GoodsSales from './components/GoodsSales.vue'
 import GoodsInfoSpec from './components/GoodsInfoSpec.vue'
 import GoodsSku from './components/GoodsSku.vue'
+import GoodsTabs from './components/GoodsTabs.vue'
+import GoodsHot from './components/GoodsHot.vue'
+import GoodsWarn from './components/GoodsWarn.vue'
 import { useRoute } from 'vue-router'
 import { getGoods } from '@/api/goods'
-import { ref, watch } from 'vue-demi'
+import { ref, watch, provide } from 'vue-demi'
 export default {
   name: 'AppGoodsPage',
   components: {
@@ -61,24 +68,32 @@ export default {
     GoodsImage,
     GoodsSales,
     GoodsInfoSpec,
-    GoodsSku
+    GoodsSku,
+    GoodsTabs,
+    GoodsHot,
+    GoodsWarn
   },
   setup () {
     // 当前路由信息
     const route = useRoute()
-    // 获取商品信息
+    // 商品信息
     const goodsData = ref(null)
-    getGoods(route.params.id).then(res => {
-      console.log(res)
-      goodsData.value = res.result
-    })
+    // 提供数据
+    provide('goods', goodsData)
+    // 获取商品数据
+    const getGoodsInfo = (id) => {
+      getGoods(id).then(res => {
+        console.log(res)
+        goodsData.value = res.result
+      })
+    }
 
-    // 监听商品地址id的改变
+    // 监听商品地址id的改变 （配置了immediate会提前执行一下）
     watch(() => route.params.id, (newVal) => {
       if (route.path === `/product/${newVal}`) {
-        getGoods(newVal)
+        getGoodsInfo(newVal)
       }
-    })
+    }, { immediate: true })
 
     // sku传递过来的值 （父组件需要判断值，如果规格选择不完整不能加入购物车）
     const changeSku = (sku) => {
