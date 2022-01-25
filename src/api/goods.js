@@ -26,3 +26,23 @@ export const getRelGoods = (id, limit = 16) => {
 export const getHotGoods = ({ id, type, limit = 3 }) => {
   return request('/goods/hot', 'get', { id, type, limit })
 }
+
+/**
+ * 获取商品的评价统计信息
+ * @param {String} id - 商品ID
+ * 当axios地址以https开头时 不会添加默认地址
+ * moke地址： https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate
+ */
+export const getCommentInfoByGoods = (id) => {
+  // return request(`/goods/${id}/evaluate`, 'get')
+  return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`, 'get')
+}
+
+/**
+ * 获取商品的评价列表
+ * @param {String} id - 商品ID
+ * @param {String} data - 筛选数据
+ */
+export const getCommentInfoByList = (id, params) => {
+  return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`, 'get', params)
+}

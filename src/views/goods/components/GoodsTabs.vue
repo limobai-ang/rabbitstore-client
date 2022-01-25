@@ -2,7 +2,7 @@
   <div class="goods-tabs">
     <nav>
       <a :class="{active: currentView === 'GoodsDetail'}" href="javascript:;" @click="setCurrentView('GoodsDetail')">商品详情</a>
-      <a :class="{active: currentView === 'GoodsComment'}" href="javascript:;" @click="setCurrentView('GoodsComment')">商品评价<span>(500+)</span></a>
+      <a :class="{active: currentView === 'GoodsComment'}" href="javascript:;" @click="setCurrentView('GoodsComment')">商品评价<span>(832+)</span></a>
     </nav>
     <!-- 动态路由组件 切换内容的地方 -->
     <component :is="currentView"></component>
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+// import { getCommentInfoByGoods } from '@/api/goods'
 import { ref } from 'vue-demi'
 import GoodsComment from './GoodsComment.vue'
 import GoodsDetail from './GoodsDetail.vue'
@@ -25,6 +26,15 @@ export default {
     const setCurrentView = (componentName) => {
       currentView.value = componentName
     }
+
+    // // 商品评价数量 (由于api原因商品评论数量显示为0, 暂时使用moke数据)
+    // // 注入数据
+    // const goods = inject('goods')
+    // const commentInfo = ref({})
+    // getCommentInfoByGoods(goods.value.id).then(res => {
+    //   console.log(res)
+    //   commentInfo.value = res.result
+    // })
     return {
       currentView,
       setCurrentView
