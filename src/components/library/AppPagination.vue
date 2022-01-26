@@ -8,21 +8,42 @@
   </div>
 </template>
 <script>
-import { computed, ref } from 'vue-demi'
+import { computed, ref, watch } from 'vue-demi'
 export default {
   name: 'AppPagination',
   props: {
-
+    total: {
+      type: Number,
+      default: 100
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    },
+    // 按钮个数
+    btnCount: {
+      type: Number,
+      default: 5
+    }
   },
-  setup () {
+  setup (props, { emit }) {
     // 总条数
     const myTotal = ref(100)
     // 每页条数
     const myPageSize = ref(10)
     // 当前第几页
     const myCurrentPage = ref(5)
-    // 按钮个数
-    const btnCount = 8
+
+    // 监听传人的值改变
+    watch(props, () => {
+      myTotal.value = props.total
+      myPageSize.value = props.pageSize
+      myCurrentPage.value = props.currentPage
+    }, { immediate: true })
 
     // 计算总页数
     const countPage = computed(() => {
@@ -35,12 +56,12 @@ export default {
     // 计算当前需要显示的数据
     const currentList = computed(() => {
       // 判断是否小于显示按钮的个数
-      if (countList.value.length < btnCount.value) {
+      if (countList.value.length < props.btnCount) {
         return countList.value
       } else {
         const arr = []
-        let index = myCurrentPage.value - Math.ceil(btnCount / 2)
-        for (let i = 0; i < btnCount; i++) {
+        let index = myCurrentPage.value - Math.ceil(props.btnCount / 2)
+        for (let i = 0; i < props.btnCount; i++) {
           arr.push(countList.value[index])
           index = index + 1
         }
@@ -73,15 +94,19 @@ export default {
     // 加减按钮
     const changePage = (type, page) => {
       if (type === 'this') {
+        if (myCurrentPage.value === page) return
         myCurrentPage.value = page
       }
       if (type === 'subtract') {
-        console.log('subtract')
-        myCurrentPage.value >= countPage.value && (myCurrentPage.value = myCurrentPage.value - 1)
+        if (myCurrentPage.value <= 1) return
+        myCurrentPage.value = myCurrentPage.value - 1
       }
       if (type === 'add') {
-        myCurrentPage.value <= 1 && (myCurrentPage.value = myCurrentPage.value + 1)
+        if (myCurrentPage.value >= countPage.value) return
+        myCurrentPage.value = myCurrentPage.value + 1
       }
+      // 修改page后向父子组件传值
+      emit('changeCurrentPage', myCurrentPage.value)
     }
 
     return {

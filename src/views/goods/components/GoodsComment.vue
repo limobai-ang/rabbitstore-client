@@ -66,7 +66,12 @@
       </div>
     </div>
     <!-- 分页组件 -->
-    <AppPagination />
+    <AppPagination
+    :total="commentList.counts"
+    :pageSize="reqParams.pageSize"
+    :currentPage="reqParams.page"
+    :btnCount="6"
+    @changeCurrentPage="changeCurrentPage"/>
   </div>
 </template>
 <script>
@@ -152,6 +157,10 @@ export default {
       reqParams.page = 1
     }
 
+    // 切换分页 (修改page数据 触发watch 更新数据)
+    const changeCurrentPage = pageIndex => {
+      reqParams.page = pageIndex
+    }
     return {
       commentInfo,
       currentTags,
@@ -159,7 +168,8 @@ export default {
       sortList,
       changeSort,
       changeTag,
-      commentList
+      commentList,
+      changeCurrentPage
     }
   }
 }
