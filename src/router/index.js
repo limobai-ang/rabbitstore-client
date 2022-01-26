@@ -4,6 +4,7 @@ const Layout = () => import('@/views/Layout')
 const category = () => import('@/views/category')
 const sub = () => import('@/views/category/Sub')
 const goods = () => import('@/views/goods')
+const login = () => import('@/views/login')
 
 const routes = [
   {
@@ -15,7 +16,8 @@ const routes = [
       { path: '/category/sub/:id', component: sub },
       { path: '/product/:id', component: goods }
     ]
-  }
+  },
+  { path: '/login', component: login }
 ]
 
 const router = createRouter({
