@@ -4,10 +4,10 @@
       <ul>
         <template v-if="profile.token">
           <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{profile.account}}</a></li>
-          <li><a href="javascript:;">退出登录</a></li>
+          <li><a href="javascript:;" @click="logout">退出登录</a></li>
         </template>
         <template v-else>
-          <li><RouterLink to="/login">请先登录</RouterLink></li>
+          <li><RouterLink :to="{name:'login', query:{redirectUrl: $route.path}}">请先登录</RouterLink></li>
           <li><a href="javascript:;">免费注册</a></li>
         </template>
         <li><a href="javascript:;">我的订单</a></li>
@@ -22,6 +22,7 @@
 <script>
 import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
   name: 'AppTopnav',
   setup () {
@@ -29,8 +30,18 @@ export default {
     // const { profile } = store.state.user
     const profile = computed(() => store.state.user.profile)
 
+    // 退出登录
+    const router = useRouter()
+    const logout = () => {
+      // 清空数据
+      store.commit('user/setUser', {})
+      // 跳到登录页
+      router.push('/login')
+    }
     return {
-      profile
+      profile,
+      logout
+
     }
   }
 }

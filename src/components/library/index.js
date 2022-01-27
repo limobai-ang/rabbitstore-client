@@ -13,6 +13,9 @@
 // 图片加载失败显示的图片
 import imgError from '@/assets/images/imgError.png'
 
+// 导入message组件
+import Message from './Message'
+
 const importFn = require.context('./', false, /\.vue$/)
 
 export default {
@@ -32,8 +35,12 @@ export default {
       // 注册组件
       app.component(component.name, component)
     })
+
     // 自定义指令
     defineDirective(app)
+
+    // 如果你想挂载全局的属性，能够通过组件实例调用的属性   this.$message
+    app.config.globalProperties.$message = Message// 原型函数
   }
 }
 
