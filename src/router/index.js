@@ -5,6 +5,7 @@ const category = () => import('@/views/category')
 const sub = () => import('@/views/category/Sub')
 const goods = () => import('@/views/goods')
 const login = () => import('@/views/login')
+const loginCallback = () => import('@/views/login/callback')
 
 const routes = [
   {
@@ -17,7 +18,15 @@ const routes = [
       { path: '/product/:id', component: goods }
     ]
   },
-  { name: 'login', path: '/login', component: login }
+  {
+    name: 'login',
+    path: '/login',
+    component: login
+  },
+  {
+    path: '/login/callback',
+    component: loginCallback
+  }
 ]
 
 const router = createRouter({

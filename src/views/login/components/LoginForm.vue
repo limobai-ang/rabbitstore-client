@@ -60,7 +60,10 @@
       <a href="javascript:;" class="btn" @click="login">登录</a>
     </Form>
     <div class="action">
-      <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      <!-- <span id="qqLoginBtn"></span> -->
+      <a href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback">
+        <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      </a>
       <div class="url">
         <a href="javascript:;">忘记密码</a>
         <a href="javascript:;">免费注册</a>
@@ -71,7 +74,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ref, reactive, onUnmounted } from 'vue-demi'
 import { Form, Field } from 'vee-validate'
 // 导入效验规则对象
@@ -81,6 +84,10 @@ import Message from '@/components/library/Message'
 import { userAccountLogin, userMobileLoginMsg, userMobileLogin } from '@/api/user'
 
 import { useIntervalFn } from '@vueuse/core'
+
+// 导入qq登录变量
+// import QC from 'qc'
+
 export default {
   name: 'LoginForm',
   components: {
@@ -91,8 +98,6 @@ export default {
     const store = useStore()
     // // 使用router
     const router = useRouter()
-    // 使用route
-    const route = useRoute()
 
     // 是否短信登录
     const isMsgLogin = ref(false)
@@ -187,8 +192,16 @@ export default {
       // 2. 提示
       Message({ type: 'success', text: '登录成功' })
       // 3. 跳转
-      router.push(route.query.redirectUrl || '/')
+      router.push(store.state.user.redirectUrl || '/')
     }
+
+    // QQ登录
+    // onMounted(() => {
+    //   // 组件渲染完毕，使用QC生成QQ登录按钮(获取跳转地址)
+    //   QC.Login({
+    //     btnId: 'qqLoginBtn'
+    //   })
+    // })
 
     return {
       isMsgLogin,

@@ -26,6 +26,9 @@ import LoginHeader from './components/LoginHeaders.vue'
 import LoginFooter from './components/LoginFooter.vue'
 import LoginForm from './components/LoginForm.vue'
 import { ref } from 'vue-demi'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+
 export default {
   name: 'Login',
   components: {
@@ -35,6 +38,15 @@ export default {
   },
   setup () {
     const activeName = ref('account')
+
+    // 使用store
+    const store = useStore()
+    // 使用route
+    const route = useRoute()
+
+    // 修改回跳地址
+    store.commit('user/setRedirectUrl', route.query.redirectUrl || '/')
+
     return {
       activeName
     }
