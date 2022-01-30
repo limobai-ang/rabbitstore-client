@@ -120,7 +120,7 @@ export default {
     // 表单对象数据
     const form = reactive({
       isAgree: false,
-      account: 'zhousg',
+      account: 'limobai',
       password: '123456',
       mobile: null,
       verificationCode: null

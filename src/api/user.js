@@ -38,3 +38,55 @@ export const userMobileLogin = ({ mobile, verificationCode }) => {
 export const userQQLogin = (unionId, source = 6) => {
   return request('/login/social', 'post', { unionId, source })
 }
+
+/**
+ * 获取QQ绑定的时候短信验证码
+ * @param {String} mobile - 手机号
+ * @returns promise
+ */
+export const userQQBindCode = (mobile) => {
+  return request('/login/social/code', 'get', { mobile })
+}
+
+/**
+ * QQ登录-绑定帐号
+ * @param {String} unionId - QQ唯一标识，openId
+ * @param {String} mobile - 手机号
+ * @param {String} code - 验证码
+ * @returns
+ */
+export const userQQBindLogin = ({ unionId, mobile, code }) => {
+  console.log({ unionId, mobile, code })
+  return request('/login/social/bind', 'post', { unionId, mobile, code })
+}
+
+/**
+ * 校验帐号是否存在
+ * @param {String} account - 帐号
+ * @returns Promise
+ */
+export const userCheckAccount = (account) => {
+  return request('/register/check', 'get', { account })
+}
+
+/**
+ * 获取QQ完善信息时候的短信验证码
+ * @param {String} mobile - 手机号
+ * @returns promise
+ */
+export const userQQPatchCode = (mobile) => {
+  return request('/register/code', 'get', { mobile })
+}
+
+/**
+ * 获取QQ完善信息提交
+ * @param {String} mobile - 手机号
+ * @param {String} account - 用户名
+ * @param {String} code - 验证码
+ * @param {String} password - 密码
+ * @param {String} unionId - qq唯一标识
+ * @returns promise
+ */
+export const userQQPatchLogin = ({ account, mobile, code, password, unionId }) => {
+  return request(`/login/social/${unionId}/complement`, 'post', { account, mobile, code, password })
+}

@@ -21,10 +21,10 @@
         </a>
       </nav>
       <div class="tab-content" v-if="hasAccount">
-        <CallbackBind />
+        <CallbackBind :openId="unionId"/>
       </div>
       <div class="tab-content" v-else>
-        <CallbackPatch />
+        <CallbackPatch :openId="unionId"/>
       </div>
     </section>
     <section class="container" v-else>
@@ -63,6 +63,8 @@ export default {
     const hasAccount = ref(true)
     // 登录成功和失败时的切换
     const isBind = ref(false)
+    // 保存的openId
+    const unionId = ref(null)
 
     const router = useRouter()
     const route = useRoute()
@@ -76,6 +78,7 @@ export default {
     if (QC.Login.check()) {
       // 获取qq唯一标识 向后台发送第三方登录请求
       QC.Login.getMe((openId) => {
+        unionId.value = openId
         // 发送登录请求
         userQQLogin(openId, 1)
           .then((res) => {
@@ -99,7 +102,8 @@ export default {
 
     return {
       hasAccount,
-      isBind
+      isBind,
+      unionId
     }
   }
 }

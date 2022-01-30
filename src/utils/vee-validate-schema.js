@@ -1,3 +1,5 @@
+import { userCheckAccount } from '@/api/user'
+
 // 定义校验规则提供给vee-validate组件使用
 export default {
   // 校验account
@@ -27,6 +29,15 @@ export default {
   },
   isAgree (value) {
     if (!value) return '请勾选同意用户协议'
+    return true
+  },
+  // 验证用户名是否存在
+  async accountConfirm (value) {
+    if (!value) return '请输入用户名'
+    if (!/^[a-zA-Z]\w{5,19}$/.test(value)) return '字母开头且6-20个字符'
+    // 服务端校验
+    const { result } = await userCheckAccount(value)
+    if (result.valid) return '用户名已存在'
     return true
   }
 }
