@@ -22,6 +22,7 @@ export default {
     setUser (state, payload) {
       state.profile = payload
     },
+    // 修改登录会跳地址
     setRedirectUrl (state, redirectUrl) {
       state.redirectUrl = redirectUrl
     }

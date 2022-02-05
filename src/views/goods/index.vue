@@ -25,7 +25,7 @@
           <!-- 选择数量组件 -->
           <AppNumbox v-model="num" :max="goodsData.inventory" label="数量"/>
           <!-- 按钮 -->
-          <AppButton type="primary" style="margin-top:20px;">加入购物车</AppButton>
+          <AppButton type="primary" style="margin-top:20px;" @click="insertCart">加入购物车</AppButton>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -59,8 +59,10 @@ import GoodsTabs from './components/GoodsTabs.vue'
 import GoodsHot from './components/GoodsHot.vue'
 import GoodsWarn from './components/GoodsWarn.vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import { getGoods } from '@/api/goods'
 import { ref, watch, provide } from 'vue-demi'
+import Message from '@/components/library/Message'
 export default {
   name: 'AppGoodsPage',
   components: {
@@ -78,7 +80,10 @@ export default {
     const route = useRoute()
     // 商品信息
     const goodsData = ref(null)
-    // 提供数据
+    // 商品数量
+    const num = ref(1)
+
+    // 向后代组件提供数据
     provide('goods', goodsData)
     // 获取商品数据
     const getGoodsInfo = (id) => {
@@ -96,8 +101,12 @@ export default {
     }, { immediate: true })
 
     // sku传递过来的值 （父组件需要判断值，如果规格选择不完整不能加入购物车）
+    // currSku 当前sku的状态
+    const currSku = ref(null)
+    // 选择完整传递过来的sku是一个对象,没有选着完整传递的值为false
     const changeSku = (sku) => {
       // 判断传递过来的值是否选择完整
+      currSku.value = sku
       if (sku) {
         goodsData.value.price = sku.price
         goodsData.value.oldPrice = sku.oldPrice
@@ -105,12 +114,39 @@ export default {
       }
     }
 
-    // 商品数量
-    const num = ref(1)
+    // 点击加入购物车
+    const store = useStore()
+    const insertCart = () => {
+      console.log('点击购物车')
+      if (currSku.value) {
+        // 商品信息选择完整 触发insertCart事件并传递数据
+        const { id, name, price, mainPictures } = goodsData.value
+        const { skuId, specsText: attrsText, inventory: stock } = currSku.value
+        store.dispatch('cart/insertCart', {
+          skuId,
+          attrsText,
+          stock,
+          id,
+          name,
+          price,
+          nowPrice: price,
+          picture: mainPictures[0],
+          selected: true,
+          isEffective: true,
+          count: num.value
+        }).then(res => {
+          Message({ type: 'success', text: '添加至购物车成功' })
+        })
+      } else {
+        Message({ type: 'error', text: '请先选择完商品信息在添加至购物车' })
+      }
+    }
     return {
       goodsData,
       changeSku,
-      num
+      num,
+      insertCart,
+      currSku
     }
   }
 }

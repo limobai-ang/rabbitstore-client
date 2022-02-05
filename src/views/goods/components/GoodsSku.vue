@@ -4,7 +4,7 @@
       <dt>{{item.name}}</dt>
       <dd>
         <template v-for="(info, index) in item.values" :key="index">
-          <img :class="{selected: info.selected, disabled: info.disabled}" v-if="info.picture" :src="info.picture" @click="clickSpecs(item, info)" alt="">
+          <img :class="{selected: info.selected, disabled: info.disabled}" v-if="info.picture" :src="info.picture" @click="clickSpecs(item, info)" :title="info.name">
           <span :class="{selected: info.selected, disabled: info.disabled}" @click="clickSpecs(item, info)" v-else>{{info.name}}</span>
         </template>
       </dd>
