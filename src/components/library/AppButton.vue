@@ -19,7 +19,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
-.apps-button {
+.app-button {
   appearance: none;
   border: none;
   outline: none;

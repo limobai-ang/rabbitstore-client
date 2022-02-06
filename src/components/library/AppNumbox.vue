@@ -1,6 +1,6 @@
 <template>
   <div class="app-numbox">
-    <div class="label">数量</div>
+    <div class="label">{{label}}</div>
     <div class="numbox">
       <a href="javascript:;" @click="setCount('subtract')">-</a>
       <input type="text" readonly :value="modelValue">
@@ -18,7 +18,7 @@ export default {
     },
     label: {
       type: String,
-      default: ''
+      default: '数量'
     },
     // 定义最大值和最小值
     min: {

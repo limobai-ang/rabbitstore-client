@@ -6,6 +6,7 @@
   </div>
 </template>
 <script>
+import { useVModel } from '@vueuse/core'
 export default {
   name: 'AppCheckbox',
   props: {
@@ -15,8 +16,12 @@ export default {
     }
   },
   setup (props, { emit }) {
+    const checked = useVModel(props, 'modelValue', emit)
     const changeChecked = () => {
-      emit('update:modelValue', !props.modelValue)
+      const newVal = !checked.value
+      checked.value = newVal
+      // 让组件支持change事件
+      emit('change', newVal)
     }
     return { changeChecked }
   }

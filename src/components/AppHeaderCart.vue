@@ -1,12 +1,12 @@
 <template>
   <div class="cart">
-    <a class="curr" href="javascript:;">
+    <RouterLink to="/cart" class="curr">
       <i class="iconfont icon-cart"></i><em>{{$store.getters['cart/validCartData'].length}}</em>
-    </a>
-    <div class="layer">
+    </RouterLink>
+    <div class="layer"  v-if="$store.getters['cart/validCartData'].length&&$route.path!=='/cart'">
       <div class="list">
         <div class="item" v-for="item in $store.getters['cart/validCartData']" :key="item.id">
-          <RouterLink to="">
+          <RouterLink :to="`/product/${item.id}`">
             <img :src="item.picture" alt="">
             <div class="center">
               <p class="name ellipsis-2">{{item.name}}</p>
@@ -17,7 +17,7 @@
               <p class="count">{{item.count}}</p>
             </div>
           </RouterLink>
-          <i class="iconfont icon-close-new"></i>
+          <i class="iconfont icon-close-new" @click="closeCartGoods(item.skuId)"></i>
         </div>
       </div>
       <div class="foot">
@@ -25,15 +25,36 @@
           <p>共 {{$store.getters['cart/validCartData'].length}} 件商品</p>
           <p>&yen;{{$store.getters['cart/cartPrice']}}</p>
         </div>
-        <AppButton type="plain">去购物车结算</AppButton>
+        <RouterLink to="/cart">
+          <AppButton type="plain" size="small">去购物车结算</AppButton>
+        </RouterLink>
       </div>
     </div>
   </div>
 </template>
 <script>
+import Message from '@/components/library/Message'
+import { useStore } from 'vuex'
 export default {
   name: 'AppHeaderCart',
   setup () {
+    const store = useStore()
+    // 更新购物车数据
+    store.dispatch('cart/findCartList').then(() => {
+      Message({ type: 'success', text: '更新本地购物车成功' })
+    })
+    // 删除购物车数据
+    const closeCartGoods = (skuId) => {
+      store.dispatch('cart/deleteCart', skuId).then(() => {
+        Message({ type: 'success', text: '删除商品成功' })
+      }).catch(() => {
+        Message({ type: 'error', text: '删除商品失败' })
+      })
+    }
+
+    return {
+      closeCartGoods
+    }
   }
 }
 </script>
