@@ -27,6 +27,7 @@
                   <div>
                     <p class="name ellipsis">{{item.name}}</p>
                     <!-- 选择规格组件 -->
+                    <CartSku :attrsText="item.attrsText" :skuId="item.skuId" @change="newSkuInfom => updateCartSku(newSkuInfom, item.skuId)"/>
                   </div>
                 </div>
               </td>
@@ -94,9 +95,10 @@ import Message from '@/components/library/Message'
 import Confirm from '@/components/library/confirm'
 import { useStore } from 'vuex'
 import GoodRelevant from '@/views/goods/components/GoodsRelevant'
+import CartSku from './components/CartSku'
 export default {
   name: 'CartPage',
-  components: { GoodRelevant },
+  components: { GoodRelevant, CartSku },
   setup () {
     const store = useStore()
     // 删除购物车数据
@@ -147,13 +149,20 @@ export default {
       }).catch(e => {})
     }
 
+    // 更新sku信息
+    const updateCartSku = (newSkuInfo, oldSkuId) => {
+      console.log(newSkuInfo, oldSkuId)
+      store.dispatch('cart/updateCartSku', { oldSkuId, newSkuInfo })
+    }
+
     return {
       closeCartGoods,
       checkOne,
       checkAll,
       setCount,
       batchDeleteCart,
-      clearInvalidGoods
+      clearInvalidGoods,
+      updateCartSku
     }
   }
 }

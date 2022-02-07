@@ -14,7 +14,6 @@ export default {
     insertCart (state, payload) {
       // 加入购物车前看看购物车里面有没有相同的商品
       const sameIndex = state.list.findIndex(item => item.skuId === payload.skuId)
-      console.log(sameIndex)
       if (sameIndex >= 0) {
         // 如果有相同的商品就在原来商品的数量加上现在的现在的商品数量
         payload.count = state.list[sameIndex].count + payload.count
@@ -149,6 +148,26 @@ export default {
             context.commit('deleteCart', item.skuId)
           })
           resolve()
+        }
+      })
+    },
+    // 修改sku规格函数
+    updateCartSku (context, { oldSkuId, newSkuInfo }) {
+      return new Promise((resolve, reject) => {
+        if (context.rootState.user.profile.token) {
+          // 登录 TODO
+        } else {
+          // 本地
+          // 但你修改了sku的时候其实skuId需要更改，相当于把原来的信息移出，创建一条新的商品信息。
+          // 1. 获取旧的商品信息
+          const oldGoods = context.state.list.find(item => item.skuId === oldSkuId)
+          // 2. 删除旧的商品
+          context.commit('deleteCart', oldSkuId)
+          // 3. 合并一条新的商品信息
+          const { skuId, price: nowPrice, inventory: stock, specsText: attrsText } = newSkuInfo
+          const newGoods = { ...oldGoods, skuId, nowPrice, stock, attrsText }
+          // 4. 去插入即可
+          context.commit('insertCart', newGoods)
         }
       })
     }

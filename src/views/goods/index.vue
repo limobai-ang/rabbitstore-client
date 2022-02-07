@@ -21,7 +21,7 @@
         <div class="spec" v-if="goodsData">
           <GoodsInfoSpec :goods="goodsData" />
           <!-- Sku 组件 -->
-          <GoodsSku :goods="goodsData" skuId="1369155862131642369" @change="changeSku" />
+          <GoodsSku :goods="goodsData" @change="changeSku" />
           <!-- 选择数量组件 -->
           <AppNumbox v-model="num" :max="goodsData.inventory" label="数量"/>
           <!-- 按钮 -->

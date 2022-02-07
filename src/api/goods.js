@@ -46,3 +46,12 @@ export const getCommentInfoByGoods = (id) => {
 export const getCommentInfoByList = (id, params) => {
   return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`, 'get', params)
 }
+
+/**
+ * 获取商品的specs和skus
+ * @param {String} skuId - 商品SKUID
+ * @returns Promise
+ */
+export const getSpecsAndSkus = (skuId) => {
+  return request(`/goods/sku/${skuId}`, 'get')
+}

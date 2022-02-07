@@ -165,6 +165,7 @@ export default {
 .sku-state-mixin () {
   border: 1px solid #e4e4e4;
   margin-right: 10px;
+  margin-bottom: 5px;
   cursor: pointer;
   &.selected {
     border-color: @xtxColor;
@@ -180,7 +181,7 @@ export default {
   padding-top: 20px;
   dl {
     display: flex;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     align-items: center;
     dt {
       width: 50px;
