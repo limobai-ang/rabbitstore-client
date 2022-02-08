@@ -82,7 +82,7 @@
         <div class="total">
           共 {{$store.getters['cart/cartAllTotal']}} 件商品，已选择 {{$store.getters['cart/selectedTotal']}} 件，商品合计：
           <span class="red">¥{{$store.getters['cart/selectedAmount']}}</span>
-          <AppButton type="primary">下单结算</AppButton>
+          <AppButton type="primary" @click=" goCheckout">下单结算</AppButton>
         </div>
       </div>
       <!-- 猜你喜欢 -->
@@ -96,6 +96,7 @@ import Confirm from '@/components/library/confirm'
 import { useStore } from 'vuex'
 import GoodRelevant from '@/views/goods/components/GoodsRelevant'
 import CartSku from './components/CartSku'
+import { useRouter } from 'vue-router'
 export default {
   name: 'CartPage',
   components: { GoodRelevant, CartSku },
@@ -132,6 +133,9 @@ export default {
 
     // 批量删除商品
     const batchDeleteCart = () => {
+      // 如果没有选中的商品就提示用户 结束操作
+      if (!store.getters['cart/selectedList'].length) return Message({ type: 'warn', text: '当前没有选中商品' })
+      // 弹出对话框
       Confirm({ text: '您确定从购物车删除选中的商品吗?' }).then(() => {
         store.dispatch('cart/batchDeleteCart').then(() => {
           Message({ type: 'success', text: '删除商品成功' })
@@ -151,10 +155,25 @@ export default {
 
     // 更新sku信息
     const updateCartSku = (newSkuInfo, oldSkuId) => {
-      console.log(newSkuInfo, oldSkuId)
       store.dispatch('cart/updateCartSku', { oldSkuId, newSkuInfo })
     }
 
+    // 下单结算
+    const router = useRouter()
+    const goCheckout = () => {
+      if (!store.getters['cart/selectedList'].length) return Message({ type: 'warn', text: '亲选择商品后在进行结算' })
+      // 判断是否登录
+      if (store.state.user.profile.token) {
+        // 登录了就跳转去支付页面
+        router.push('/member/checkout')
+      } else {
+        // 未登录就询问用户是否去登录
+        Confirm({ text: '下单结算需要登录，您是否去登录？', title: '是否登录' }).then(() => {
+          // 点击确认  (这里我们依然跳转支付页面，在路由导航中我们会配置登录拦截功能)
+          router.push('/member/checkout')
+        }).catch(e => {})
+      }
+    }
     return {
       closeCartGoods,
       checkOne,
@@ -162,7 +181,8 @@ export default {
       setCount,
       batchDeleteCart,
       clearInvalidGoods,
-      updateCartSku
+      updateCartSku,
+      goCheckout
     }
   }
 }

@@ -179,7 +179,6 @@ export default {
         data = await userAccountLogin(form).catch(err => err)
         // 帐号密码登录失败
         if (data.code !== '1') return Message({ type: 'error', text: data.response.data.message || '登录失败' })
-        console.dir(data)
       } else {
         // 手机号登录
         data = await userMobileLogin(form).catch(err => err)
@@ -189,10 +188,14 @@ export default {
       // 1. 存储信息 (将数据保存到vuex并持久化)
       const { id, account, nickname, avatar, token, mobile } = data.result
       store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
-      // 2. 提示
-      Message({ type: 'success', text: '登录成功' })
-      // 3. 跳转
-      router.push(store.state.user.redirectUrl || '/')
+
+      // 合并购物车操作
+      store.dispatch('cart/mergeLocalCart').then(() => {
+        // 2. 提示
+        Message({ type: 'success', text: '登录成功' })
+        // 3. 跳转
+        router.push(store.state.user.redirectUrl || '/')
+      })
     }
 
     // QQ登录

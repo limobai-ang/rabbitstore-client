@@ -35,6 +35,8 @@ export default {
     const logout = () => {
       // 清空数据
       store.commit('user/setUser', {})
+      // 清空购物车
+      store.commit('cart/setCartList', [])
       // 跳到登录页
       router.push('/login')
     }

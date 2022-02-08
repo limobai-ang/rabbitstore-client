@@ -117,7 +117,6 @@ export default {
     // 点击加入购物车
     const store = useStore()
     const insertCart = () => {
-      console.log('点击购物车')
       if (currSku.value) {
         // 商品信息选择完整 触发insertCart事件并传递数据
         const { id, name, price, mainPictures } = goodsData.value
@@ -138,7 +137,7 @@ export default {
           Message({ type: 'success', text: '添加至购物车成功' })
         })
       } else {
-        Message({ type: 'error', text: '请先选择完商品信息在添加至购物车' })
+        Message({ type: 'warn', text: '请先选择完商品信息在添加至购物车' })
       }
     }
     return {

@@ -2,14 +2,15 @@
   <div class="app-confirm" :class="{ fade }" @click="cancelCallback">
     <div class="wrapper" :class="{ fade }">
       <div class="header">
-        <h3>温馨提示</h3>
+        <h3>{{title}}</h3>
         <a href="JavaScript:;" class="iconfont icon-close-new" @click="cancelCallback"></a>
       </div>
       <div class="body">
         <i class="iconfont icon-warning"></i>
-        <span>您确认从购物车删除该商品吗？</span>
+        <span>{{text}}</span>
       </div>
       <div class="footer">
+        <!-- 点击改变promise的状态-->
         <AppButton size="mini" type="gray" @click="cancelCallback">取消</AppButton>
         <AppButton size="mini" type="primary" @click="submitCallback">确认</AppButton>
       </div>

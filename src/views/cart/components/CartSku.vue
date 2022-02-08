@@ -48,7 +48,6 @@ export default {
       // 打开时发起请求获取数据
       getSpecsAndSkus(props.skuId).then(res => {
         goods.value = res.result
-        console.log(res.result)
         // 信息获取成功关闭loading
         loading.value = false
       })
@@ -75,8 +74,9 @@ export default {
 
     // 确定按钮
     const confirm = () => {
-      // 规格没有选择完整 就提示一下用户 没有改变数据值为初始值null 就直接关闭
-      if (newSkuInfo.value === null && newSkuInfo.value.skuId !== props.skuId) return hide()
+      //  没有改变数据值为初始值null 或者选择规格与起始规格相同 就直接关闭
+      if (newSkuInfo.value === null || newSkuInfo.value.skuId === props.skuId) return hide()
+      // 规格没有选择完整 就提示一下用户
       if (newSkuInfo.value === false) return Message({ type: 'warn', text: '请选择完整规格' })
       // 将数据传递给父组件
       emit('change', newSkuInfo.value)

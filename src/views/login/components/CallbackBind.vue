@@ -128,16 +128,19 @@ export default {
         Message({ type: 'error', text: err.response.data.message })
         return err
       })
-      console.dir(data)
       if (data.response.status === 400) return
       // 绑定成功
       // 1. 存储信息 (将数据保存到vuex并持久化)
       const { id, account, nickname, avatar, token, mobile } = data.result
       store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
-      // 2. 提示
-      Message({ type: 'success', text: 'QQ绑定成功' })
-      // 3. 跳转
-      router.push(store.state.user.redirectUrl || '/')
+
+      // 合并购物车操作
+      store.dispatch('cart/mergeLocalCart').then(() => {
+        // 2. 提示
+        Message({ type: 'success', text: 'QQ绑定成功' })
+        // 3. 跳转
+        router.push(store.state.user.redirectUrl || '/')
+      })
     }
     return { nickname, avatar, form, mySchema, send, time, formRef, submit }
   }
