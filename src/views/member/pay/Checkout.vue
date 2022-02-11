@@ -121,7 +121,7 @@ export default {
     const submitOrder = () => {
       if (!requestParams.addressId) return Message({ text: '请选择收货地址' })
       createOrder(requestParams).then(data => {
-        router.push({ path: '/member/pay', query: { id: data.result.id } })
+        router.push({ path: '/member/pay', query: { orderId: data.result.id } })
       })
     }
     return {
