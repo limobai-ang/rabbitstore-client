@@ -176,13 +176,19 @@ export default {
       let data = null
       // 判断登录放方式（账号登录还是手机号登录）
       if (!isMsgLogin.value) {
-        data = await userAccountLogin(form).catch(err => err)
+        data = await userAccountLogin(form).catch(err => {
+          err.isError = true
+          return err
+        })
         // 帐号密码登录失败
-        if (data.code !== '1') return Message({ type: 'error', text: data.response.data.message || '登录失败' })
+        if (data.isError) return Message({ type: 'error', text: data.response.data.message || '登录失败' })
       } else {
         // 手机号登录
-        data = await userMobileLogin(form).catch(err => err)
-        if (data.code !== '1') return Message({ type: 'error', text: data.response.data.message || '登录失败' })
+        data = await userMobileLogin(form).catch(err => {
+          err.isError = true
+          return err
+        })
+        if (data.isError) return Message({ type: 'error', text: data.response.data.message || '登录失败' })
       }
       // 成功
       // 1. 存储信息 (将数据保存到vuex并持久化)

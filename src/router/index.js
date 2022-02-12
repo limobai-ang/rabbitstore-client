@@ -8,9 +8,11 @@ const goods = () => import('@/views/goods')
 const login = () => import('@/views/login')
 const loginCallback = () => import('@/views/login/callback')
 const cart = () => import('@/views/cart')
+
 const checkout = () => import('@/views/member/pay/Checkout')
 const pay = () => import('@/views/member/pay')
 const PayResult = () => import('@/views/member/pay/PayResult')
+
 const MemberLayout = () => import('@/views/member/Layout')
 const MemberHome = () => import('@/views/member/home')
 
@@ -27,13 +29,12 @@ const routes = [
       { path: '/member/checkout', component: checkout },
       { path: '/member/pay', component: pay },
       { path: '/pay/callback', component: PayResult },
-      // 查看订单详情
-      { path: '/member/order' },
       {
         path: '/member',
         component: MemberLayout,
         children: [
           { path: '/member', component: MemberHome }
+          // { path: '/member/order' }
         ]
       }
 

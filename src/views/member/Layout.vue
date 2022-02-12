@@ -1,6 +1,8 @@
 <template>
   <div class="container">
+    <!-- 个人中心列表 -->
     <AppMemberAside />
+    <!-- 列表显示区域 -->
     <article class="article">
       <RouterView />
     </article>
