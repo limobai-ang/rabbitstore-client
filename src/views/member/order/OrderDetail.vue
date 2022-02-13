@@ -4,10 +4,6 @@
 
 <script>
 export default {
-
+  name: 'OrderDetail'
 }
 </script>
-
-<style>
-
-</style>

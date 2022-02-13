@@ -47,6 +47,10 @@ export const usePayTime = () => {
 
   // 开启定时器 countdown 倒计时时间（单位秒）
   const start = (countdown) => {
+    if (countdown < 0) {
+      timeText.value = '已结束'
+      return
+    }
     time.value = countdown
     // 得到mm-ss的时间格式 赋值给timeText
     timeText.value = dayjs.unix(time.value).format('mm分ss秒')
