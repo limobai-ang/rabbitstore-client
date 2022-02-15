@@ -53,12 +53,11 @@
         <AppButton @click="$router.push(`/member/pay?orderId=${order.id}`)" v-if="order.orderState===1" type="primary" size="small">立即付款</AppButton>
         <AppButton v-if="order.orderState===3" type="primary" size="small">确认收货</AppButton>
         <p><a href="javascript:;">查看详情</a></p>
-        <p v-if="order.orderState===1"><a href="javascript:;">取消订单</a></p>
+        <p v-if="order.orderState===1"><a @click="$emit('order-cancel', order)" href="javascript:;">取消订单</a></p>
         <p v-if="[2,3,4,5].includes(order.orderState)"><a href="javascript:;">再次购买</a></p>
         <p v-if="[4,5].includes(order.orderState)"><a href="javascript:;">申请售后</a></p>
       </div>
     </div>
-
   </div>
 </template>
 

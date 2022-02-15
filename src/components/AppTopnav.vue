@@ -10,7 +10,7 @@
           <li><RouterLink :to="{name:'login', query:{redirectUrl: $route.path}}">请先登录</RouterLink></li>
           <li><a href="javascript:;">免费注册</a></li>
         </template>
-        <li><a href="javascript:;">我的订单</a></li>
+        <li><RouterLink to="/member/order">我的订单</RouterLink></li>
         <li><RouterLink to="/member">会员中心</RouterLink></li>
         <li><a href="javascript:;">帮助中心</a></li>
         <li><a href="javascript:;">关于我们</a></li>
