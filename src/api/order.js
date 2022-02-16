@@ -60,3 +60,21 @@ export const findOrderList = ({ orderState, page, pageSize }) => {
 export const cancelOrder = (orderId, cancelReason) => {
   return request(`/member/order/${orderId}/cancel`, 'put', { cancelReason })
 }
+
+/**
+ * 确认收货
+ * @param {String} orderId - 订单ID
+ * @returns Promise
+ */
+export const confirmOrder = (orderId) => {
+  return request(`/member/order/${orderId}/receipt`, 'put')
+}
+
+/**
+ * 查看物理
+ * @param {String} id - 订单ID
+ * @returns
+ */
+export const logisticsOrder = (id) => {
+  return request(`/member/order/${id}/logistics`, 'get')
+}

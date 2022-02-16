@@ -14,6 +14,8 @@
           :key="item.id"
           :order="item"
           @order-cancel="cancelAnOrderFn"
+          @order-confirm="confirmOrderFn"
+          @order-logistics="useLogisticsOrder"
         />
       </div>
     </AppTabsPanel>
@@ -24,6 +26,7 @@
     :pageSize="requestParams.pageSize"
     :currentPage="requestParams.page"
   />
+  <!-- 取消订单弹出框 -->
   <AppDialog
     title="取消订单"
     :visible="cancelAnOrderDialog"
@@ -56,17 +59,22 @@
       <AppButton type="primary" @click="submit">确认</AppButton>
     </template>
   </AppDialog>
+  <!-- 查看物流组件 -->
+  <OrderLogistics ref="logisticsOrderCom" />
 </template>
 
 <script>
 import OrderItem from './components/OrderItem'
 import { ref, reactive, watch } from 'vue-demi'
-import { findOrderList, cancelOrder } from '@/api/order'
+import { findOrderList, cancelOrder, confirmOrder } from '@/api/order'
 import { orderStatus, cancelReason } from '@/api/constants'
 import Message from '@/components/library/Message'
+import Confirm from '@/components/library/confirm'
+import OrderLogistics from './components/OrderLogistics'
+
 export default {
   name: 'OrderPage',
-  components: { OrderItem },
+  components: { OrderItem, OrderLogistics },
   setup () {
     const activeName = ref('all')
     // 查询订单参数
@@ -130,6 +138,26 @@ export default {
         Message({ text: '取消订单成功', type: 'success' })
       })
     }
+
+    // 确认收货
+    const confirmOrderFn = (order) => {
+      // item 就是你要确认收货的订单
+      Confirm({ text: '您确认收到货吗？确认后货款将会打给卖家。' }).then(() => {
+        confirmOrder(order.id).then(() => {
+          Message({ text: '确认收货成功', type: 'success' })
+          // 确认收货后状态变成 待评价
+          order.orderState = 4
+        })
+      })
+    }
+
+    // 查看物流
+    // 封装逻辑-查看物流
+    const logisticsOrderCom = ref(null)
+    const useLogisticsOrder = (item) => {
+      console.log(logisticsOrderCom)
+      logisticsOrderCom.value.open(item)
+    }
     return {
       activeName,
       orderList,
@@ -142,7 +170,10 @@ export default {
       cancelAnOrderFn,
       cancelReason,
       submit,
-      curText
+      curText,
+      confirmOrderFn,
+      useLogisticsOrder,
+      logisticsOrderCom
     }
   }
 }

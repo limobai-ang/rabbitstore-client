@@ -34,7 +34,7 @@
         <!-- 待收货：查看物流 -->
         <!-- 待评价：评价商品 -->
         <!-- 已完成：查看评价 -->
-        <p v-if="order.orderState===3"><a href="javascript:;" class="green">查看物流</a></p>
+        <p v-if="order.orderState===3"><a href="javascript:;" class="green" @click="$emit('order-logistics', order)">查看物流</a></p>
         <p v-if="order.orderState===4"><a href="javascript:;" class="green">评价商品</a></p>
         <p v-if="order.orderState===5"><a href="javascript:;" class="green">查看评价</a></p>
       </div>
@@ -51,7 +51,7 @@
         <!-- 已完成：查看详情，再次购买，申请售后 -->
         <!-- 已取消：查看详情 -->
         <AppButton @click="$router.push(`/member/pay?orderId=${order.id}`)" v-if="order.orderState===1" type="primary" size="small">立即付款</AppButton>
-        <AppButton v-if="order.orderState===3" type="primary" size="small">确认收货</AppButton>
+        <AppButton v-if="order.orderState===3" type="primary" size="small" @click="$emit('order-confirm', order)">确认收货</AppButton>
         <p><a href="javascript:;">查看详情</a></p>
         <p v-if="order.orderState===1"><a @click="$emit('order-cancel', order)" href="javascript:;">取消订单</a></p>
         <p v-if="[2,3,4,5].includes(order.orderState)"><a href="javascript:;">再次购买</a></p>
@@ -64,7 +64,6 @@
 <script>
 import { orderStatus } from '@/api/constants'
 import { usePayTime } from '@/hooks'
-console.log(orderStatus)
 export default {
   name: 'OrderItem',
   props: {
@@ -73,9 +72,11 @@ export default {
       default: () => ({})
     }
   },
+  emits: ['order-confirm', 'order-cancel', 'order-logistics'],
   setup (props) {
     const { start, timeText } = usePayTime()
     start(props.order.countdown)
+
     return { orderStatus, timeText }
   }
 }
