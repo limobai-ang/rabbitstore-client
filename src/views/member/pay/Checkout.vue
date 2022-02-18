@@ -78,9 +78,9 @@
 </template>
 <script>
 import CheckoutAddress from './components/CheckoutAddress.vue'
-import { findCheckoutInfo, createOrder } from '@/api/order'
+import { findCheckoutInfo, createOrder, findOrderRepurchase } from '@/api/order'
 import { reactive, ref } from 'vue-demi'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Message from '@/components/library/Message'
 
 export default {
@@ -101,16 +101,32 @@ export default {
     const checkoutInfo = ref(null)
 
     // 获取订单信息
-    findCheckoutInfo().then(res => {
-      checkoutInfo.value = res.result
-      // 设置提交时候的商品
-      requestParams.goods = checkoutInfo.value.goods.map(item => {
-        return {
-          skuId: item.skuId,
-          count: item.count
-        }
+    const route = useRoute()
+    if (route.query.orderId) {
+      // 使用商品订单结算 （再次购买）
+      findOrderRepurchase(route.query.orderId).then(res => {
+        checkoutInfo.value = res.result
+        // 设置提交时候的商品
+        requestParams.goods = checkoutInfo.value.goods.map(item => {
+          return {
+            skuId: item.skuId,
+            count: item.count
+          }
+        })
       })
-    })
+    } else {
+      // 按照购物车商品结算
+      findCheckoutInfo().then(res => {
+        checkoutInfo.value = res.result
+        // 设置提交时候的商品
+        requestParams.goods = checkoutInfo.value.goods.map(item => {
+          return {
+            skuId: item.skuId,
+            count: item.count
+          }
+        })
+      })
+    }
     // 配置地址
     const getAddress = (defaultAddressId) => {
       requestParams.addressId = defaultAddressId
